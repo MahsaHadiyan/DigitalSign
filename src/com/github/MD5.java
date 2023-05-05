@@ -1,4 +1,4 @@
-package com.github.digitalSign;
+package com.github;
 
 import java.security.MessageDigest;
 

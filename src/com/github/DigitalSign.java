@@ -1,24 +1,34 @@
-package com.github.digitalSign;
-
+package com.github;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.security.Key;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
 
-
 /**
  * Revision History:
  * Date            Author           Task ID                         Notes
  * ==========   =================   ==============  ===============================================
- * 2023.05.04   Mahsa
+ * 2023.05.05   Mahsa
  */
-public class Main {
+public class DigitalSign {
 
-    public static void main(String[] args) throws Exception {
+    private static final DigitalSign digitalSign=new DigitalSign();
+
+    public DigitalSign getInstance(){
+        return digitalSign;
+    }
+
+    public static String validate() throws Exception {
+        String plain = getPlain();
+        return MD5.getMD5(plain);
+    }
+
+    public static String getPlain() throws IOException {
         File file = new File("doc.txt");
         FileReader fileReader = new FileReader(file);
         int ascii = fileReader.read();
@@ -28,8 +38,10 @@ public class Main {
             ascii = fileReader.read();
         }
         fileReader.close();
-        String hash = MD5.getMD5(plain);
+        return plain;
+    }
 
+    public static void sign(String hash) throws Exception {
         Map<String, Key> map = RSA.getRSAKeys();
         PublicKey publicKey = (PublicKey) map.get("PublicKey");
         PrivateKey privateKey = (PrivateKey) map.get("PrivateKey");
@@ -37,23 +49,11 @@ public class Main {
         String digitalSign = Base64.getEncoder().encodeToString(sign);
         sign = Base64.getMimeDecoder().decode(digitalSign);
         hash = RSA.getRSADecryptByPublicKey(publicKey, sign);
-        String providedHash = MD5.getMD5(plain);
+        String providedHash = MD5.getMD5(DigitalSign.getPlain());
         System.out.println("hash = " + hash);
         System.out.println("providedHash = " + providedHash);
-        if (hash.equals(providedHash)){
+        if (hash.equals(providedHash)) {
             System.out.println("TRUE");
         }
-    }
-
-    public static void main1(String[] args) {
-        // Java 8
-        // Using encode()
-        byte[] encode = Base64.getEncoder().encode("Java2blog".getBytes());
-        String result = new String(encode);
-        System.out.println(result);
-
-        // Using encodeToString() to get String directly
-        String encodeToString = Base64.getEncoder().encodeToString("Java2blog".getBytes());
-        System.out.println(encodeToString);
     }
 }
