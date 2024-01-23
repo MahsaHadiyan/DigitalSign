@@ -2,9 +2,7 @@ package com.github;
 
 import java.security.MessageDigest;
 
-/**
- * Created by Amirsam on 9/21/2016.
- */
+
 public class MD5 {
     public static String getMD5(String text) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");

@@ -8,9 +8,7 @@ import java.util.HashMap;
 
 import javax.crypto.Cipher;
 
-/**
- * Created by Amirsam on 9/21/2016.
- */
+
 public class RSA {
 
     public static HashMap getRSAKeys() throws Exception {
